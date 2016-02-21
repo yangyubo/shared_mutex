@@ -11,8 +11,13 @@ typedef struct shared_mutex_t {
   pthread_mutex_t *ptr; // Pointer to the pthread mutex and
                         // shared memory segment.
   int shm_fd;           // Descriptor of shared memory object.
-  char* name;           // Name the mutex and associated
+  char* name;           // Name of the mutex and associated
                         // shared memory object.
+  int created;          // Equals 1 (true) if initialization
+                        // of this structure caused creation
+                        // of a new shared mutex.
+                        // Equals 0 (false) if this mutex was
+                        // just retrieved from shared memory.
 } shared_mutex_t;
 
 // Initialize a new shared mutex with given `name`. If a mutex

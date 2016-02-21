@@ -17,6 +17,10 @@ int main() {
     return 1;
   }
 
+  if (mutex.created) {
+    printf("The mutex was just created\n");
+  }
+
   // Use pthread calls for locking and unlocking.
   pthread_mutex_lock(mutex.ptr);
   printf("Press eny key to unlock the mutex");
@@ -57,6 +61,11 @@ typedef struct shared_mutex_t {
   int shm_fd;           // Descriptor of shared memory object.
   char* name;           // Name of the mutex and associated
                         // shared memory object.
+  int created;          // Equals 1 (true) if initialization
+                        // of this structure caused creation
+                        // of a new shared mutex.
+                        // Equals 0 (false) if this mutex was
+                        // just retrieved from shared memory.
 } shared_mutex_t;
 ```
 
