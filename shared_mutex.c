@@ -11,6 +11,7 @@
 
 shared_mutex_t shared_mutex_init(char *name) {
   shared_mutex_t mutex = {NULL, 0, NULL, 0};
+  errno = 0;
 
   // Open existing shared memory object, or create one.
   // Two separate calls are needed here, to mark fact of creation
