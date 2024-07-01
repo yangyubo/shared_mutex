@@ -1,24 +1,16 @@
 #ifndef SHARED_MUTEX_H
 #define SHARED_MUTEX_H
 
-#define _BSD_SOURCE // for ftruncate
 #include <pthread.h> // pthread_mutex_t, pthread_mutexattr_t,
-                     // pthread_mutexattr_init, pthread_mutexattr_setpshared,
-                     // pthread_mutex_init, pthread_mutex_destroy
+#include <stdbool.h>
+// pthread_mutexattr_init, pthread_mutexattr_setpshared,
+// pthread_mutex_init, pthread_mutex_destroy
 
-// Structure of a shared mutex.
-typedef struct shared_mutex_t {
-  pthread_mutex_t *ptr; // Pointer to the pthread mutex and
-                        // shared memory segment.
-  int shm_fd;           // Descriptor of shared memory object.
-  char* name;           // Name of the mutex and associated
-                        // shared memory object.
-  int created;          // Equals 1 (true) if initialization
-                        // of this structure caused creation
-                        // of a new shared mutex.
-                        // Equals 0 (false) if this mutex was
-                        // just retrieved from shared memory.
-} shared_mutex_t;
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef struct shared_mutex *shared_mutex_t;
 
 // Initialize a new shared mutex with given `name`. If a mutex
 // with such name exists in the system, it will be loaded.
@@ -36,7 +28,7 @@ typedef struct shared_mutex_t {
 // There is no workaround currently, except to run first
 // initialization only before multi-threaded or multi-process
 // functionality.
-shared_mutex_t shared_mutex_init(char *name);
+shared_mutex_t shared_mutex_init(const char *name);
 
 // Close access to the shared mutex and free all the resources,
 // used by the structure.
@@ -62,5 +54,15 @@ int shared_mutex_close(shared_mutex_t mutex);
 //
 // **NOTE:** It will not unlock locked mutex.
 int shared_mutex_destroy(shared_mutex_t mutex);
+
+int shared_mutex_lock(shared_mutex_t mutex);
+
+int shared_mutex_unlock(shared_mutex_t mutex);
+
+bool shared_mutex_is_valid(shared_mutex_t mutex);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // SHARED_MUTEX_H

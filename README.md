@@ -55,7 +55,8 @@ int cleanup() {
 
 Structure of a shared mutex.
 ```c
-typedef struct shared_mutex_t {
+typedef struct shared_mutex *shared_mutex_t;
+typedef struct shared_mutex {
   pthread_mutex_t *ptr; // Pointer to the pthread mutex and
                         // shared memory segment.
   int shm_fd;           // Descriptor of shared memory object.
@@ -66,7 +67,7 @@ typedef struct shared_mutex_t {
                         // of a new shared mutex.
                         // Equals 0 (false) if this mutex was
                         // just retrieved from shared memory.
-} shared_mutex_t;
+} shared_mutex;
 ```
 
 ### shared_mutex_init
