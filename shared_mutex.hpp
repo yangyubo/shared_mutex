@@ -71,7 +71,12 @@ public:
     //
     // **NOTE:** It will not unlock locked mutex.
     int destory() {
-        return shared_mutex_destroy(_rawMutex);
+        if (_rawMutex) {
+            auto const ret = shared_mutex_destroy(_rawMutex);
+            _rawMutex = nullptr;
+            return ret;
+        }
+        return 0;
     }
 
     virtual ~SharedMutex() {
